@@ -200,7 +200,11 @@ export default function ({ $axios }, inject) {
   }
 
   // defining the inner Vue axios instace to the outer scope
-  $axios.defaults.baseURL = endpoints[process.env.NETWORK].MIDGARD_BASE_URL
+  if (endpoints[process.env.NETWORK].MIDGARD_BASE_URL) {
+    $axios.defaults.baseURL = endpoints[process.env.NETWORK].MIDGARD_BASE_URL
+  } else {
+    $axios.defaults.baseURL = 'http://localhost:3000/api/disabled'
+  }
   $axiosInstace = $axios
 
   const api = {

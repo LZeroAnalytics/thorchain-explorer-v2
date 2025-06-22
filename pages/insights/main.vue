@@ -194,11 +194,16 @@ export default {
       this.affiliateWallets(data)
     })
 
-    this.$api.getDashboardPlots().then(({ data }) => {
-      this.feesRewards(data.earning.intervals)
-      this.supplyBurn(data.earning)
-      this.rewardsHistory = this.formatRewards(data.earning)
-    })
+    if (process.env.NETWORK !== 'local') {
+      this.$api.getDashboardPlots().then(({ data }) => {
+        this.feesRewards(data.earning.intervals)
+        this.supplyBurn(data.earning)
+        this.rewardsHistory = this.formatRewards(data.earning)
+      })
+    } else {
+      // Local network - disable advanced analytics
+      console.log('Advanced analytics disabled in local network mode')
+    }
 
     this.getCoinMarketInfo()
   },
