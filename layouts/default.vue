@@ -131,17 +131,22 @@ export default {
         .catch((e) => console.error(e))
     },
     getRunePrice() {
-      this.$api
-        .getStats()
-        .then((res) => {
-          this.$store.commit(
-            'setRunePrice',
-            Number.parseFloat(res.data.runePriceUSD)
-          )
-        })
-        .catch((error) => {
-          console.error(error)
-        })
+      if (process.env.NETWORK !== 'local') {
+        this.$api
+          .getStats()
+          .then((res) => {
+            this.$store.commit(
+              'setRunePrice',
+              Number.parseFloat(res.data.runePriceUSD)
+            )
+          })
+          .catch((error) => {
+            console.error(error)
+          })
+      } else {
+        // Local network - disable RUNE price fetching
+        console.log('RUNE price fetching disabled in local network mode')
+      }
     },
     getPools() {
       this.$api

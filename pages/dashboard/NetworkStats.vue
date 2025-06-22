@@ -154,20 +154,32 @@ export default {
     async fetchData() {
       try {
         this.loading = true
-        const { data: dashboardData } = await this.$api.getDashboardData()
-        if (dashboardData) {
-          this.stats = dashboardData.stats || {}
-          this.runeSupply = +dashboardData.runeSupply?.amount?.amount / 1e8 || 0
+        if (process.env.NETWORK !== 'local') {
+          const { data: dashboardData } = await this.$api.getDashboardData()
+          if (dashboardData) {
+            this.stats = dashboardData.stats || {}
+            this.runeSupply = +dashboardData.runeSupply?.amount?.amount / 1e8 || 0
+          }
           this.network = dashboardData.networkData || {}
           this.totalSwap24USD = +dashboardData.stats?.volume24USD || 0
+        } else {
+          // Local network - disable advanced stats
+          this.stats = {}
+          this.runeSupply = 0
+          this.network = {}
+          this.totalSwap24USD = 0
         }
 
-        const { data: earningsData } = await this.$api.getEarnings()
-        if (earningsData) {
-          const burnedPool = earningsData.meta?.pools?.find(
-            (p) => p.pool === 'income_burn'
-          )
-          this.totalBurnedRune = burnedPool ? burnedPool.earnings / 1e8 : 0
+        if (process.env.NETWORK !== 'local') {
+          const { data: earningsData } = await this.$api.getEarnings()
+          if (earningsData) {
+            const burnedPool = earningsData.meta?.pools?.find(
+              (p) => p.pool === 'income_burn'
+            )
+            this.totalBurnedRune = burnedPool ? burnedPool.earnings / 1e8 : 0
+          }
+        } else {
+          this.totalBurnedRune = 0
         }
       } catch (error) {
         console.error('Error fetching network stats:', error)
