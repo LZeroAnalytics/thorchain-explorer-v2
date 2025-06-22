@@ -2,18 +2,27 @@ import endpoints from './endpoints'
 import { $axiosInstace } from './index'
 
 export function getDashboardData() {
+  if (!endpoints[process.env.NETWORK].SERVER_URL) {
+    return Promise.reject(new Error('SERVER_URL not available in local network'))
+  }
   return $axiosInstace.get(
     endpoints[process.env.NETWORK].SERVER_URL + 'api/dashboardData'
   )
 }
 
 export function getDashboardPlots() {
+  if (!endpoints[process.env.NETWORK].SERVER_URL) {
+    return Promise.reject(new Error('SERVER_URL not available in local network'))
+  }
   return $axiosInstace.get(
     endpoints[process.env.NETWORK].SERVER_URL + 'api/dashboardPlots'
   )
 }
 
 export function getExraNodesInfo() {
+  if (!endpoints[process.env.NETWORK].SERVER_URL) {
+    return Promise.reject(new Error('SERVER_URL not available in local network'))
+  }
   return $axiosInstace.get(
     endpoints[process.env.NETWORK].SERVER_URL + 'api/extraNodesInfo'
   )
@@ -32,6 +41,9 @@ export function getChainsHeight() {
 }
 
 export function getHolders(asset = 'THOR.RUNE') {
+  if (!endpoints[process.env.NETWORK].SERVER_URL) {
+    return Promise.reject(new Error('SERVER_URL not available in local network'))
+  }
   const baseUrl = endpoints[process.env.NETWORK].SERVER_URL + 'holders'
   return $axiosInstace.get(baseUrl, {
     params: { asset }
@@ -143,6 +155,10 @@ export function getAffiliateDaily() {
 let fetchDataCancel = null
 
 export function getActions(params) {
+  if (!endpoints[process.env.NETWORK].SERVER_URL) {
+    return Promise.reject(new Error('SERVER_URL not available in local network'))
+  }
+  
   if (fetchDataCancel) {
     fetchDataCancel.cancel('cancel')
   }
@@ -162,6 +178,9 @@ export function getCoinMarketInfo() {
 }
 
 export function getNodesInfo() {
+  if (!endpoints[process.env.NETWORK].SERVER_URL) {
+    return Promise.reject(new Error('SERVER_URL not available in local network'))
+  }
   return $axiosInstace.get(
     endpoints[process.env.NETWORK].SERVER_URL + 'api/nodesInfo'
   )
@@ -186,12 +205,18 @@ export function getTopSwapsMonthly() {
 }
 
 export function getEarnings() {
+  if (!endpoints[process.env.NETWORK].SERVER_URL) {
+    return Promise.reject(new Error('SERVER_URL not available in local network'))
+  }
   return $axiosInstace.get(
     endpoints[process.env.NETWORK].SERVER_URL + 'api/rawEarnings'
   )
 }
 
 export function getNodes() {
+  if (!endpoints[process.env.NETWORK].SERVER_URL) {
+    return Promise.reject(new Error('SERVER_URL not available in local network'))
+  }
   return $axiosInstace.get(endpoints[process.env.NETWORK].SERVER_URL + 'nodes')
 }
 

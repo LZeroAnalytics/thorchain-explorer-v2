@@ -3,6 +3,9 @@ import endpoints from './endpoints'
 import { $axiosInstace } from './index'
 
 export function getTHORLastBlock() {
+  if (!endpoints[process.env.NETWORK].SERVER_URL) {
+    return Promise.reject(new Error('SERVER_URL not available in local network'))
+  }
   return $axiosInstace.get(
     endpoints[process.env.NETWORK].SERVER_URL + 'lastblock'
   )

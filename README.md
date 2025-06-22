@@ -9,6 +9,46 @@ before serving or building the repo add `.env` file to the root folder with curr
 NETWORK="mainnet"
 ```
 
+## Local Development with Custom THORChain Network
+
+This explorer can be configured to work with a local THORChain network using the `NETWORK=local` environment variable.
+
+### Setup for Local Network
+
+1. Start your local THORChain network (e.g., using Kurtosis)
+2. Update the port mappings in `api/endpoints.js` if needed
+3. Set the environment variable: `NETWORK=local`
+4. Run the explorer: `npm run dev`
+
+### Available Features in Local Mode
+
+When running with `NETWORK=local`, the following core blockchain explorer features are available:
+
+- **Network Information**: View network statistics and parameters
+- **Node Status**: Monitor validator nodes and their status
+- **Block Explorer**: Browse latest blocks and blockchain data
+- **Transaction Viewing**: View individual transactions and their details
+- **Real-time Data**: Live updates from the local THORChain node
+
+### Disabled Features in Local Mode
+
+The following advanced features require external services (Midgard, custom backend) and are disabled in local mode:
+
+- **Analytics Dashboards**: Historical charts and statistics
+- **Advanced Transaction Analysis**: Detailed swap and liquidity analytics  
+- **Pool Statistics**: Historical pool performance data
+- **Earnings History**: Node and network earnings analytics
+- **Affiliate Tracking**: Affiliate swap statistics
+- **Price Data**: RUNE price information and market data
+
+### Local Network Endpoints
+
+The local configuration uses the following endpoints:
+- **THORNode API**: `http://127.0.0.1:32776/` (adjust port as needed)
+- **Tendermint RPC**: `http://127.0.0.1:32779/` (adjust port as needed)
+- **Midgard API**: Disabled (null)
+- **Custom Backend**: Disabled (null)
+
 ## Build Setup
 
 ```bash

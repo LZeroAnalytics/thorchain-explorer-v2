@@ -98,14 +98,28 @@ export default {
       this.$store.commit('setTheme', true)
     }
 
-    this.getRunePrice()
+    if (process.env.NETWORK !== 'local') {
+      this.getRunePrice()
 
-    this.$api
-      .getNodes()
-      .then(({ data }) => {
-        this.$store.commit('setNodesData', data)
-      })
-      .catch((e) => console.error(e))
+      this.$api
+        .getNodes()
+        .then(({ data }) => {
+          this.$store.commit('setNodesData', data)
+        })
+        .catch((e) => console.error(e))
+
+      this.getChainsHeight()
+
+      this.getPools()
+
+      this.updateInterval = setInterval(() => {
+        this.getChainsHeight()
+        this.getRunePrice()
+        this.getPools()
+      }, 20000)
+    } else {
+      console.log('Dashboard layout: Disabled advanced features in local network mode')
+    }
 
     this.$api
       .getNetwork()
@@ -113,16 +127,6 @@ export default {
         this.$store.commit('setNetworkData', data)
       })
       .catch((e) => console.error(e))
-
-    this.getChainsHeight()
-
-    this.getPools()
-
-    this.updateInterval = setInterval(() => {
-      this.getChainsHeight()
-      this.getRunePrice()
-      this.getPools()
-    }, 20000)
 
     const changeHeight = () => {
       const vh = window.innerHeight * 0.01
@@ -181,38 +185,44 @@ export default {
       this.isSearch = true
     },
     getChainsHeight() {
-      this.$api
-        .getChainsHeight()
-        .then(async ({ data }) => {
-          const chainsHeight = data
-          const thorHeight = (await this.$api.getTHORLastBlock()).data
-          this.$store.commit('setChainsHeight', {
-            ...chainsHeight,
-            THOR: thorHeight,
+      if (process.env.NETWORK !== 'local') {
+        this.$api
+          .getChainsHeight()
+          .then(async ({ data }) => {
+            const chainsHeight = data
+            const thorHeight = (await this.$api.getTHORLastBlock()).data
+            this.$store.commit('setChainsHeight', {
+              ...chainsHeight,
+              THOR: thorHeight,
+            })
           })
-        })
-        .catch((e) => console.error(e))
+          .catch((e) => console.error(e))
+      }
     },
     getRunePrice() {
-      this.$api
-        .getStats()
-        .then((res) => {
-          this.$store.commit(
-            'setRunePrice',
-            Number.parseFloat(res.data.runePriceUSD)
-          )
-        })
-        .catch((error) => {
-          console.error(error)
-        })
+      if (process.env.NETWORK !== 'local') {
+        this.$api
+          .getStats()
+          .then((res) => {
+            this.$store.commit(
+              'setRunePrice',
+              Number.parseFloat(res.data.runePriceUSD)
+            )
+          })
+          .catch((error) => {
+            console.error(error)
+          })
+      }
     },
     getPools() {
-      this.$api
-        .getPools()
-        .then(({ data }) => {
-          this.$store.commit('setPools', data)
-        })
-        .catch((e) => console.error(e))
+      if (process.env.NETWORK !== 'local') {
+        this.$api
+          .getPools()
+          .then(({ data }) => {
+            this.$store.commit('setPools', data)
+          })
+          .catch((e) => console.error(e))
+      }
     },
   },
 }

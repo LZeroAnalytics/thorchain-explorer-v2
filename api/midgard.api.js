@@ -53,6 +53,9 @@ export function getPoolTxs(poolName, offset = 0, limit = 10) {
 }
 
 export function getPools(period) {
+  if (!endpoints[process.env.NETWORK].SERVER_URL) {
+    return Promise.reject(new Error('SERVER_URL not available in local network'))
+  }
   return $axiosInstace.get(
     endpoints[process.env.NETWORK].SERVER_URL +
       `pools?period=${period ?? '180d'}`
@@ -60,6 +63,9 @@ export function getPools(period) {
 }
 
 export function getPoolStats(poolName) {
+  if (!endpoints[process.env.NETWORK].SERVER_URL) {
+    return Promise.reject(new Error('SERVER_URL not available in local network'))
+  }
   return $axiosInstace.get(
     endpoints[process.env.NETWORK].SERVER_URL +
       `pool/${poolName}/stats?period=all`

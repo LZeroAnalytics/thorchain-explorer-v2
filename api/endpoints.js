@@ -16,4 +16,13 @@ module.exports = {
     SERVER_URL: 'https://vanaheimex.com/stage/',
     MODULE_ADDR: 'sthor1dheycdevq39qlkxs2a6wuuzyn4aqxhvepe6as4',
   },
+  local: {
+    MIDGARD_BASE_URL: null,
+    MIDGARD_GRAPH_QL: null,
+    ARCHIVE_THORNODE: null,
+    THORNODE_URL: 'http://127.0.0.1:32776/',
+    TENDERMINT_URL: 'http://127.0.0.1:32779/',
+    SERVER_URL: null,
+    MODULE_ADDR: 'thor1dheycdevq39qlkxs2a6wuuzyn4aqxhve4qxtxt',
+  },
 }
