@@ -158,7 +158,8 @@ export default {
           const { data: dashboardData } = await this.$api.getDashboardData()
           if (dashboardData) {
             this.stats = dashboardData.stats || {}
-            this.runeSupply = +dashboardData.runeSupply?.amount?.amount / 1e8 || 0
+            this.runeSupply =
+              +dashboardData.runeSupply?.amount?.amount / 1e8 || 0
           }
           this.network = dashboardData.networkData || {}
           this.totalSwap24USD = +dashboardData.stats?.volume24USD || 0
