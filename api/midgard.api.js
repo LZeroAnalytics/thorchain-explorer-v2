@@ -52,9 +52,15 @@ export function getPoolTxs(poolName, offset = 0, limit = 10) {
   return $axiosInstace.get('actions', { params })
 }
 
-export function getPools(period) {
+export async function getPools(period) {
   if (!endpoints[process.env.NETWORK].SERVER_URL) {
-    return Promise.reject(new Error('SERVER_URL not available in local network'))
+    try {
+      const poolsRes = await $axiosInstace.get(endpoints[process.env.NETWORK].THORNODE_URL + 'thorchain/pools')
+      return { data: poolsRes.data }
+    } catch (error) {
+      console.error('Error fetching pools from THORNode:', error)
+      return Promise.reject(new Error('Failed to fetch pools from THORNode API'))
+    }
   }
   return $axiosInstace.get(
     endpoints[process.env.NETWORK].SERVER_URL +
@@ -62,9 +68,27 @@ export function getPools(period) {
   )
 }
 
-export function getPoolStats(poolName) {
+export async function getPoolStats(poolName) {
   if (!endpoints[process.env.NETWORK].SERVER_URL) {
-    return Promise.reject(new Error('SERVER_URL not available in local network'))
+    try {
+      const poolRes = await $axiosInstace.get(endpoints[process.env.NETWORK].THORNODE_URL + `thorchain/pool/${poolName}`)
+      const pool = poolRes.data
+      
+      const poolStats = {
+        asset: pool.asset,
+        assetDepth: pool.balance_asset || '0',
+        runeDepth: pool.balance_rune || '0',
+        poolUnits: pool.pool_units || '0',
+        status: pool.status || 'Unknown',
+        volume24h: pool.volume_24h || '0',
+        volumeTotal: pool.volume_total || '0'
+      }
+      
+      return { data: poolStats }
+    } catch (error) {
+      console.error('Error fetching pool stats from THORNode:', error)
+      return Promise.reject(new Error('Failed to fetch pool stats from THORNode API'))
+    }
   }
   return $axiosInstace.get(
     endpoints[process.env.NETWORK].SERVER_URL +
